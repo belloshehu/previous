@@ -1,0 +1,155 @@
+<CustomTwoLineAvatarListItem>
+    md_bg_color: app.theme_cls.primary_color
+
+<LessonDialog>
+    spacing: "12dp"
+    size_hint_y: None
+    height: self.minimum_height
+    orientation: 'vertical'
+    padding: 0, 20, 0, 0
+    
+    MDTextField:
+        id: name
+        hint_text:'Topic'
+        helper_text:'Topic name'
+        helper_text_mode: 'on_focus'
+        focus: True
+    MDTextField:
+        id: description
+        hint_text:'Topic name/description'
+        helper_text:'Topic description'
+        helper_text_mode: 'on_focus'
+
+    BoxLayout:
+        size_hint_y: None
+        height: self.minimum_height
+        spacing: 20
+        MDFillRoundFlatButton:
+            text: 'SUBMIT'
+            on_release: app.submit_lessons_form(name, description)
+        MDFlatButton:
+            text: 'CANCEL'
+            #text_color: self.theme_cls.primary_color
+            on_release: app.close_dialog()
+         
+    
+<CourseDialog>
+    spacing: "12dp"
+    size_hint_y: None
+    height: self.minimum_height
+    orientation: 'vertical'
+    padding: 0, 20, 0, 0
+    MDTextField:
+        id: title
+        hint_text:'Course title'
+        helper_text:'Title or name'
+        helper_text_mode: 'on_focus'
+        focus: True
+    MDTextField:
+        id: name
+        hint_text:'Course name/description'
+        helper_text:'Course name or description'
+        helper_text_mode: 'on_focus'
+
+    BoxLayout:
+        size_hint_y: None
+        height: self.minimum_height
+        spacing: 20
+        MDFillRoundFlatButton:
+            text: 'SUBMIT'
+            on_release: app.submit_courses_form(title, name)
+        MDFlatButton:
+            text: 'CANCEL'
+            on_release: app.close_dialog()
+    
+<Content>
+    spacing: "12dp"
+    size_hint_y: None
+    height: self.minimum_height
+    orientation: 'vertical'
+    padding: 0, 20, 0, 0
+    MDTextField:
+        id: full_name
+        auto_focus: True
+        hint_text:'Full name'
+        helper_text:'First and Second name'
+        helper_text_mode: 'on_focus'
+        focus: True
+    MDTextField:
+        id: contact
+        hint_text:'contact'
+        helper_text:'Email or phone number'
+        helper_text_mode: 'on_focus'
+
+    BoxLayout:
+        size_hint_y: None
+        height: self.minimum_height
+        spacing: 20
+        MDFillRoundFlatButton:
+            text: 'SUBMIT'
+            on_release: app.submit_tutors_form(contact, full_name)
+        MDFlatButton:
+            text: 'CANCEL'
+            on_release: app.close_dialog()
+<AppRoot>:
+    MDToolbar:
+        id: toolbar
+        title: 'Previouslessons'
+        right_action_items: [['magnify', lambda x :x]]
+        elevation: 12
+        size_hint_y: None
+        height: self.minimum_height
+        text_color: app.theme_cls.primary_light
+    
+    MDBottomNavigation:
+        text_color: app.theme_cls.primary_color
+        md_bg_color: (0.2, 1, 1, 1)
+        MDBottomNavigationItem:
+            name: 'course'
+            text: 'Courses'
+            icon: 'school'
+            ScrollView:
+                MDList:
+                    id: courses_list
+                    padding: 10
+            MDFloatingActionButton:
+                pos_hint: {'center_x':0.9}
+                icon: 'plus'
+                on_release: app.add_course()
+               
+
+
+        MDBottomNavigationItem:
+            name: 'tutors'
+            text: 'Tutors'
+            icon: 'account'
+            padding: 10
+            ScrollView:
+                MDList:
+                    id: tutors_list
+                    padding: 10
+                   
+                       
+            MDFloatingActionButton:
+                pos_hint: {'center_x':0.9}
+                icon: 'plus'
+                on_release: app.add_tutor()
+            
+                
+
+        MDBottomNavigationItem:
+            name: 'lessons'
+            text: 'Lessons'
+            icon: 'book'
+            padding: 10
+            ScrollView:
+                MDList:
+                    id: lessons_list
+                    padding: 10, 0       
+            MDFloatingActionButton:
+                pos_hint: {'center_x':0.9}
+                icon: 'plus'
+                on_release: app.add_lesson()
+
+
+  

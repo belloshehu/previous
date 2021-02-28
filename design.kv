@@ -1,13 +1,32 @@
-<CustomTwoLineAvatarListItem>
-    md_bg_color: app.theme_cls.primary_color
+#: import Factory kivy.factory.Factory
 
-<LessonDialog>
-    spacing: "12dp"
+<CustomTwoLineAvatarListItem>
+    text_color: (1,1,1,1)
+    background_color: (0,0,0,0)
+    canvas.before:
+        Color:
+            rgba: (0, 0.3, 0.1, 0.4)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+            
+<CustomThreeLineAvatarListItem>
+    text_color: (1,1,1,1)
+    background_color: (0,0,0,0)
+    canvas.before:
+        Color:
+            rgba: (0, 0.3, 0.1, 0.4)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<LessonDialogContent>
+    spacing: "18dp"
     size_hint_y: None
     height: self.minimum_height
     orientation: 'vertical'
-    padding: 0, 20, 0, 0
-    
+    padding: 0, 30, 0, 0
+    width_offset: '10dp'
     MDTextField:
         id: name
         hint_text:'Topic'
@@ -19,21 +38,18 @@
         hint_text:'Topic name/description'
         helper_text:'Topic description'
         helper_text_mode: 'on_focus'
+        multiline: True
 
-    BoxLayout:
-        size_hint_y: None
-        height: self.minimum_height
-        spacing: 20
-        MDFillRoundFlatButton:
-            text: 'SUBMIT'
-            on_release: app.submit_lessons_form(name, description)
-        MDFlatButton:
-            text: 'CANCEL'
-            #text_color: self.theme_cls.primary_color
-            on_release: app.close_dialog()
-         
-    
-<CourseDialog>
+    MDTextField:
+        id: date
+        hint_text: ''
+        helper_text: 'Select a date'
+        helper_text_mode: 'on_focus'
+        icon_right : 'calendar'
+        on_focus: root.open_datepicker()
+
+
+<CourseDialogContent>
     spacing: "12dp"
     size_hint_y: None
     height: self.minimum_height
@@ -51,18 +67,8 @@
         helper_text:'Course name or description'
         helper_text_mode: 'on_focus'
 
-    BoxLayout:
-        size_hint_y: None
-        height: self.minimum_height
-        spacing: 20
-        MDFillRoundFlatButton:
-            text: 'SUBMIT'
-            on_release: app.submit_courses_form(title, name)
-        MDFlatButton:
-            text: 'CANCEL'
-            on_release: app.close_dialog()
     
-<Content>
+<TutorDialogContent>
     spacing: "12dp"
     size_hint_y: None
     height: self.minimum_height
@@ -81,75 +87,159 @@
         helper_text:'Email or phone number'
         helper_text_mode: 'on_focus'
 
+
+<MainScreen>
+    name: 'main'
     BoxLayout:
-        size_hint_y: None
-        height: self.minimum_height
-        spacing: 20
-        MDFillRoundFlatButton:
-            text: 'SUBMIT'
-            on_release: app.submit_tutors_form(contact, full_name)
-        MDFlatButton:
-            text: 'CANCEL'
-            on_release: app.close_dialog()
-<AppRoot>:
-    MDToolbar:
-        id: toolbar
-        title: 'Previouslessons'
-        right_action_items: [['magnify', lambda x :x]]
-        elevation: 12
-        size_hint_y: None
-        height: self.minimum_height
-        text_color: app.theme_cls.primary_light
+        orientation: 'vertical'
+        MDToolbar:
+            id: toolbar
+            title: 'Previouslessons'
+            right_action_items: [['dots-vertical', lambda x:x]]
+            left_action_items: [['school', lambda x:x]]
+            icon_color: 1,1,1,1
+            elevation: 12
+            size_hint_y: None
+            height: self.minimum_height
+            text_color: 1, 1, 1, 1
+
+        MDBottomNavigation:
+            text_color: app.theme_cls.primary_color
+
+            MDBottomNavigationItem:
+                name: 'course'
+                text: 'Courses'
+                icon: 'school'
+                CustomScrollView:
+                    MDList:
+                        id: courses_list
+                        padding: 2
+                        spacing: 1
+                        
+                MDFloatingActionButton:
+                    pos_hint: {'center_x':0.9}
+                    icon: 'plus'
+                    on_release: app.add_course()
+                        
+
+            MDBottomNavigationItem:
+                name: 'tutors'
+                text: 'Tutors'
+                icon: 'account'
+                padding: 5
+                CustomScrollView:
+                    MDList:
+                        id: tutors_list
+                        padding: 2
+                        spacing: 1
+                    
+
+            MDBottomNavigationItem:
+                name: 'lessons'
+                text: 'Lessons'
+                icon: 'book-open-blank-variant'
+                CustomScrollView:
+                    MDList:
+                        id: lessons_list
+                        padding: 2
+                        spacing: 1
     
-    MDBottomNavigation:
-        text_color: app.theme_cls.primary_color
-        md_bg_color: (0.2, 1, 1, 1)
-        MDBottomNavigationItem:
-            name: 'course'
-            text: 'Courses'
-            icon: 'school'
-            ScrollView:
-                MDList:
-                    id: courses_list
-                    padding: 10
-            MDFloatingActionButton:
-                pos_hint: {'center_x':0.9}
-                icon: 'plus'
-                on_release: app.add_course()
-               
 
+<CourseScreen>
+    name: 'course'
+    course_detail: course_detail
+    BoxLayout:
+        orientation: 'vertical'
+        MDToolbar:
+            id: toolbar
+            title: 'Course details'
+            left_action_items: [['arrow-left', root.manager.back_to_main]]
+            right_action_items: [['dots-vertical', lambda x: x]]
+            elevation: 8
+            size_hint_y: None
+            height: self.minimum_height
+            text_color: app.theme_cls.primary_light
+        MDBoxLayout:
+            orientation: 'vertical'
+            padding: 2
+            size_hint_y: None
+            height: self.minimum_height
+            text_color: app.theme_cls.primary_color
+            md_bg_color: (0, 0, 0, 0)
+           
+            TwoLineAvatarListItem:
+                id: course_detail
+                font_style: 'H5'
+                text: ''
+                secondary_text: ''
+                course_id: 0
+                IconLeftWidget:
+                    icon: 'school'
 
-        MDBottomNavigationItem:
-            name: 'tutors'
-            text: 'Tutors'
-            icon: 'account'
-            padding: 10
-            ScrollView:
-                MDList:
-                    id: tutors_list
-                    padding: 10
-                   
-                       
-            MDFloatingActionButton:
-                pos_hint: {'center_x':0.9}
-                icon: 'plus'
-                on_release: app.add_tutor()
+        MDBottomNavigation:
+            MDBottomNavigationItem:
+                name: 'lessons'
+                text: 'Lessons'
+                icon: 'book-open-blank-variant'
+                padding: 2
+                ScrollView:
+                    background_color: (0,0,0,0)
+                    canvas.before:
+                        Color:
+                            rgba: (0,0,0,0.15)
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    MDList:
+                        id: course_lessons
+                        padding: 2
+                        spacing: 1
+                MDFloatingActionButton:
+                    pos_hint: {'center_x':0.9}
+                    icon: 'plus'
+                    on_release: app.add_lesson(course_detail)
             
-                
 
-        MDBottomNavigationItem:
-            name: 'lessons'
-            text: 'Lessons'
-            icon: 'book'
-            padding: 10
-            ScrollView:
-                MDList:
-                    id: lessons_list
-                    padding: 10, 0       
-            MDFloatingActionButton:
-                pos_hint: {'center_x':0.9}
-                icon: 'plus'
-                on_release: app.add_lesson()
+            MDBottomNavigationItem:
+                name: 'tutors'
+                text: 'Tutors'
+                icon: 'account'
+                md_bg_color: (0,0,0,0)
+                ScrollView:
+                    background_color: (0,0,0,0)
+                    canvas.before:
+                        Color:
+                            rgba: (0,0,0,0.15)
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                  
+                    MDList:
+                        id: course_tutors
+                        padding: 2
+                        spacing: 1
+                    
+                MDFloatingActionButton:
+                    pos_hint: {'center_x':0.9}
+                    icon: 'plus'
+                    on_release: app.add_tutor(course_detail)
 
 
-  
+<AppRoot>:
+    main_screen: main_screen
+    course_screen: course_screen
+    MainScreen:
+        id: main_screen
+    CourseScreen:
+        id: course_screen
+
+<CustomScrollView@ScrollView>
+    background_color: (0,0,0,0)
+    canvas.before:
+        Color:
+            rgba: (0.5, 0, 0, 0.15)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+

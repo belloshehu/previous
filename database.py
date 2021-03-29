@@ -166,6 +166,7 @@ def get_course_tutors(course_id):
     connection.commit()
     return cursor.fetchall()
 
+
 def delete_tutor(id):
     cursor, connection = make_connection()
     cursor.execute(''' DELETE FROM Tutor WHERE id=?''', (id,))

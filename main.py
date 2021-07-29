@@ -156,7 +156,6 @@ class LessonDialogContent(BoxLayout):
         date_picker.open()
 
     def get_date(self, date):
-        print(date)
         self.ids.date.text = str(date)
 
 
